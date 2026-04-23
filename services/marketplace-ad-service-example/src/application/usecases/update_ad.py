@@ -18,6 +18,7 @@ class UpdateAd(UpdateAdPort):
         category: str | None,
         city: str | None,
     ) -> Ad:
+
         async with self._uow:
             ad = await self._uow.ads.get_by_id(ad_id=ad_id)
             if not ad or ad.status == AdStatus.ARCHIVED:
