@@ -25,3 +25,5 @@ outbox:
 
 seed:
 	uv run python -m bin.seed
+
+outbox-relay: outbox

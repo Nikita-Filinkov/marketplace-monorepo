@@ -40,7 +40,11 @@ class SQLAlchemyAdRepository(AdRepository):
         self,
         ad_id: int,
     ) -> Ad | None:
-        raise NotImplementedError
+        query = select(AdModel).where(AdModel.id == ad_id)
+        item_result = await self._session.execute(query)
+        total = item_result.scalar_one_or_none()
+        if total:
+            return _to_entity(total)
 
     async def list(
         self,
@@ -71,7 +75,23 @@ class SQLAlchemyAdRepository(AdRepository):
         self,
         ad: Ad,
     ) -> None:
-        raise NotImplementedError
+        result = await self._session.execute(select(AdModel).where(AdModel.id == ad.id))
+        model = result.scalar_one_or_none()
+
+        if model is None:
+            raise ValueError(f"Ad with id {ad.id} not found")
+
+        model.user_id = ad.user_id
+        model.title = ad.title
+        model.description = ad.description
+        model.price = ad.price
+        model.category = ad.category
+        model.city = ad.city
+        model.status = ad.status.value
+        model.views = ad.views
+        model.updated_at = ad.updated_at
+
+        await self._session.flush()
 
 
 def _to_entity(model: AdModel) -> Ad:
