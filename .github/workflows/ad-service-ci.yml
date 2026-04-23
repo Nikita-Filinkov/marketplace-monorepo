@@ -1,0 +1,62 @@
+name: CI (Ad Service)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/marketplace-ad-service-example/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'services/marketplace-ad-service-example/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/marketplace-ad-service-example
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run Ruff format check
+        run: uv run ruff format --check src bin
+
+      - name: Run Ruff lint check
+        run: uv run ruff check src bin
+
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/marketplace-ad-service-example
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run tests
+        run: uv run pytest tests/ -v
