@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.13"
 
 [[package]]
@@ -500,6 +500,7 @@ dependencies = [
     { name = "greenlet" },
     { name = "httpx" },
     { name = "pydantic-settings" },
+    { name = "pytest" },
     { name = "sqlalchemy" },
     { name = "uvicorn" },
 ]
@@ -520,6 +521,7 @@ requires-dist = [
     { name = "greenlet", specifier = ">=3.4.0" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "pydantic-settings", specifier = ">=2.13.1" },
+    { name = "pytest", specifier = ">=9.0.3" },
     { name = "sqlalchemy", specifier = ">=2.0.49" },
     { name = "uvicorn", specifier = ">=0.44.0" },
 ]
